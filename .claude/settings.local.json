@@ -4,7 +4,9 @@
       "Bash(find /c/Users/pesso/radicalizeapp/node_modules/prisma -name *.md -o -name *.txt)",
       "Bash(find /c/Users/pesso/radicalizeapp/node_modules/@prisma -name *.md -o -name *.txt)",
       "Bash(find /c/Users/pesso/radicalizeapp/node_modules/prisma/dist/cli -type f -name *.md)",
-      "Bash(grep -r datasource /c/Users/pesso/radicalizeapp/node_modules/prisma --include=*.md)"
+      "Bash(grep -r datasource /c/Users/pesso/radicalizeapp/node_modules/prisma --include=*.md)",
+      "Bash(npm outdated:*)",
+      "Bash(node -e \"console.log\\(require\\(''crypto''\\).randomBytes\\(32\\).toString\\(''base64''\\)\\)\")"
     ]
   }
 }

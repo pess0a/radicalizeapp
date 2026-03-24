@@ -1,7 +1,30 @@
 import { PrismaClient } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
+import * as fs from 'node:fs'
+import * as path from 'node:path'
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
+function loadEnvFile(filePath: string) {
+  try {
+    const content = fs.readFileSync(filePath, 'utf-8')
+    for (const line of content.split('\n')) {
+      const match = line.replace(/\r$/, '').match(/^([^#=\s][^=]*)=(.*)$/)
+      if (match) {
+        const key = match[1].trim()
+        const value = match[2].trim().replace(/^["']|["']$/g, '')
+        if (!process.env[key]) process.env[key] = value
+      }
+    }
+  } catch {}
+}
+
+loadEnvFile(path.resolve('.env'))
+loadEnvFile(path.resolve('.env.local'))
+
+const url = new URL(process.env.DATABASE_URL!)
+url.searchParams.set('sslmode', 'require')
+url.searchParams.set('uselibpqcompat', 'true')
+
+const adapter = new PrismaPg({ connectionString: url.toString() })
 const prisma = new PrismaClient({ adapter })
 
 const categories = [

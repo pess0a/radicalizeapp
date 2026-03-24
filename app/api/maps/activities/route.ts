@@ -25,27 +25,44 @@ export async function GET(request: Request) {
       id: true,
       slug: true,
       name: true,
+      city: true,
+      state: true,
       latitude: true,
       longitude: true,
       price: true,
+      durationMinutes: true,
+      difficulty: true,
       images: {
         take: 1,
         orderBy: { order: 'asc' },
         select: { url: true },
       },
+      category: { select: { name: true } },
+      reviews: { select: { rating: true } },
+      _count: { select: { reviews: true } },
     },
     take: 200,
   })
 
-  const pins = activities.map((a) => ({
+  const result = activities.map((a) => ({
     id: a.id,
     slug: a.slug,
     name: a.name,
+    city: a.city,
+    state: a.state,
     latitude: a.latitude,
     longitude: a.longitude,
     price: Number(a.price),
-    imageUrl: a.images[0]?.url ?? null,
+    durationMinutes: a.durationMinutes,
+    difficulty: a.difficulty,
+    images: a.images,
+    averageRating:
+      a.reviews.length > 0
+        ? a.reviews.reduce((sum, r) => sum + r.rating, 0) / a.reviews.length
+        : null,
+    reviewCount: a._count.reviews,
+    category: a.category ?? undefined,
   }))
 
-  return NextResponse.json(pins)
+  return NextResponse.json(result)
 }

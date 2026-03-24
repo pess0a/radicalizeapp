@@ -44,7 +44,7 @@ export function ActivityList({ initialActivities }: ActivityListProps) {
       neLng: String(bounds.neLng),
     })
 
-    fetch(`/api/activities?${params}`)
+    fetch(`/api/maps/activities?${params}`)
       .then((r) => r.json())
       .then((data) => {
         if (Array.isArray(data)) setActivities(data)
@@ -80,7 +80,7 @@ export function ActivityList({ initialActivities }: ActivityListProps) {
             price={activity.price}
             durationMinutes={activity.durationMinutes}
             difficulty={activity.difficulty}
-            imageUrl={activity.images[0]?.url}
+            imageUrl={activity.images?.[0]?.url}
             averageRating={activity.averageRating}
             reviewCount={activity.reviewCount}
             categoryName={activity.category?.name}
