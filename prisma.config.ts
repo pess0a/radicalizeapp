@@ -7,7 +7,7 @@ function loadEnvFile(filePath: string) {
   try {
     const content = fs.readFileSync(filePath, 'utf-8')
     for (const line of content.split('\n')) {
-      const match = line.match(/^([^#=\s][^=]*)=(.*)$/)
+      const match = line.replace(/\r$/, '').match(/^([^#=\s][^=]*)=(.*)$/)
       if (match) {
         const key = match[1].trim()
         const value = match[2].trim().replace(/^["']|["']$/g, '')
@@ -23,6 +23,6 @@ loadEnvFile(path.resolve('.env.local'))
 export default defineConfig({
   schema: 'prisma/schema.prisma',
   datasource: {
-    url: process.env.DATABASE_URL,
+    url: process.env.DATABASE_URL_NON_POOLING,
   },
 })
